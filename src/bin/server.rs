@@ -5,6 +5,7 @@ use std::collections::HashMap;
 use std::sync::{Arc, Mutex};
 
 type Db = Arc<Mutex<HashMap<String, Bytes>>>;
+// type ShardedDb = Arc<Vec<Mutex<HashMap<String, Vec<u8>>>>>;
 
 #[tokio::main]
 async fn main() {
@@ -50,3 +51,31 @@ async fn process(socket: TcpStream, db: Db) {
         connection.write_frame(&response).await.unwrap();
     }
 }
+
+// fn new_sharded_db(num_shards: usize) -> ShardedDb {
+//     let mut db = Vec::with_capacity(num_shards);
+//     for _ in 0..num_shards {
+//         db.push(Mutex::new(HashMap::new()));
+//     }
+//     Arc::new(db)
+// }
+
+// struct CanIncrement {
+//     mutex: Mutex<i32>,
+// }
+
+// impl CanIncrement {
+//     fn increment(&self) {
+//         let mut lock = self.mutex.lock().unwrap();
+//         *lock += 1;
+//     }
+// }
+
+// async fn increment_and_do_stuff(can_incr: &CanIncrement) {
+//     can_incr.increment();
+//     do_something_async().await;
+// }
+
+// async fn do_something_async() {
+
+// }
